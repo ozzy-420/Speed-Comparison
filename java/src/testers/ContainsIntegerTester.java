@@ -1,10 +1,20 @@
 package testers;
 
+import algorithms.Algorithm;
 import algorithms.CollectionsAlgorithm;
 
 import java.util.*;
 
 public class ContainsIntegerTester extends Tester<Integer> {
+    private Collection<Integer> data;
+
+    public Collection<Integer> getData() {
+        return data;
+    }
+
+    public void setData(Collection<Integer> data) {
+        this.data = data;
+    }
 
     public ContainsIntegerTester() {
         super();
@@ -13,72 +23,24 @@ public class ContainsIntegerTester extends Tester<Integer> {
         super(dataSize, testsSize);
     }
 
-    public void runAlgorithms(CollectionsAlgorithm<Integer>[] algorithms) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public void runAlgorithms(Algorithm[] algorithms) {
         super.runAlgorithms(algorithms);
 
-        for (CollectionsAlgorithm<Integer> algorithm: algorithms) {
-            algorithm.setTests(getTests());
-            algorithm.setArguments(getData());
+        for (Algorithm algorithm: algorithms) {
 
-            algorithm.run();
-            double time = algorithm.getTime();
-
-            System.out.println("Algorytm: " + algorithm.getClass().getSimpleName());
-            System.out.println("Czas: " + time);
-            System.out.println();
-        }
-    }
-    public void compareAlgorithms(CollectionsAlgorithm<Integer>[] algorithms, int max) {
-        if (max < 1) throw new IllegalArgumentException("Liczba elementów musi być wieksza niż 0");
-
-        // Licznik zwycięstw dla każdego algorytmu
-        Map<String, Integer> winnersCount = new HashMap<>();
-
-        for (int i = 1; i < max; i++) {
-            System.out.println("\n--- Porównanie dla zestawu danych o rozmiarze: " + i + " ---");
-            initializeTestsAndData(i, i);
-
-            Map<Double, CollectionsAlgorithm<Integer>> results = new HashMap<>();
-
-            for (CollectionsAlgorithm<Integer> algorithm : algorithms) {
-                algorithm.setTests(getTests());
-                algorithm.setArguments(getData());
-
+            if (algorithm instanceof CollectionsAlgorithm) {
+                ((CollectionsAlgorithm<Integer>) algorithm).setTests(getTests());
+                ((CollectionsAlgorithm<Integer>) algorithm).setArguments(getData());
                 algorithm.run();
-                results.put(algorithm.getTime(), algorithm);
-            }
+                algorithm.saveTime();
+            } else throw new IllegalArgumentException("Niepoprawny algorytm");
 
-            if (results.keySet().size() == 1) {
-                System.out.println("Wszystkie algorytmy mają taki sam czas: " + results.keySet().iterator().next() + " ms");
-            } else {
-                double minTime = Collections.min(results.keySet());
-                double maxTime = Collections.max(results.keySet());
-
-                // Wyświetlenie wyników dla każdego algorytmu
-                System.out.println("Wyniki dla każdego algorytmu:");
-                results.forEach((time, algorithm) ->
-                        System.out.println(algorithm.getClass().getSimpleName() + ": " + time + " ms"));
-
-                // Informacja o najszybszym algorytmie
-                CollectionsAlgorithm<Integer> fastestAlgorithm = results.get(minTime);
-                System.out.println("Najszybszy algorytm: " + fastestAlgorithm.getClass().getSimpleName() + " czas: " + minTime + " ms");
-
-                // Aktualizacja licznika zwycięstw
-                String fastestName = fastestAlgorithm.getClass().getSimpleName();
-                winnersCount.put(fastestName, winnersCount.getOrDefault(fastestName, 0) + 1);
-            }
-        }
-
-        // Podsumowanie ogólne
-        System.out.println("\n--- Podsumowanie ---");
-        if (winnersCount.isEmpty()) {
-            System.out.println("Brak zwycięzców (algorytmy miały takie same czasy).");
-        } else {
-            System.out.println("Zwycięstwa algorytmów:");
-            winnersCount.forEach((algorithm, count) ->
-                    System.out.println(algorithm + ": " + count + " zwycięstw"));
+            //printAlgorithmResult(algorithm);
         }
     }
+
 
     // Helping methods
     @Override
