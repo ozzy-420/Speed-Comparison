@@ -1,29 +1,23 @@
 package algorithms.graph_search;
 
+import structures.Graph;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 public class BFS<T> extends GraphSearchAlgorithm<T> {
-    public void run() {
-        super.run();
+    protected void algorithm(T node, Set<T> visited, Deque<T> queue) {
+        queue.addLast(node);
 
-        Set<T> unvisited = new HashSet<>(getGraph().getNodes());
-        LinkedList<T> queue = new LinkedList<>();
-
-        for (T node: getGraph().getNodes()) {
-            if (unvisited.contains(node)) {
-                bfs(node, unvisited, queue);
+        while (!queue.isEmpty()) {
+            T current = queue.removeFirst();
+            for (T neighbour : getGraph().getNeighbours(current)) {
+                if (visited.add(neighbour)) {
+                    queue.addLast(neighbour);
+                }
             }
         }
-    }
-    private void bfs(T node, Set<T> unvisited, LinkedList<T> queue) {
-        unvisited.remove(node);
-        for (T neighbour: getGraph().getNeighbours(node)) {
-            if (unvisited.contains(neighbour)) {
-                queue.addLast(neighbour);
-            }
-        }
-        if (!queue.isEmpty()) bfs(queue.pop(), unvisited, queue);
     }
 }

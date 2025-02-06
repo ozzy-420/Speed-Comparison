@@ -5,14 +5,17 @@ import algorithms.contains.HashSetContainsAlgorithm;
 import algorithms.contains.ListContainsAlgorithm;
 import algorithms.graph_search.BFS;
 import algorithms.graph_search.DFS;
+import algorithms.string_iteration.*;
+import algorithms.string_iteration.CharArrayForEach;
 import testers.ContainsIntegerTester;
 import testers.GraphSearchTester;
+import testers.StringIterationTester;
 
 public class Main {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
-        GraphSearchTester tester = new GraphSearchTester();
-        tester.compareAlgorithms(new Algorithm[] {new DFS<Integer>()}, 1000);
+        StringIterationTester tester = new StringIterationTester();
+        tester.compareAlgorithms(new Algorithm[] {new CharArrayFor(), new CharArrayForEach(), new CharAt()}, 1000);
 
 
     }

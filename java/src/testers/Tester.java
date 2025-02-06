@@ -8,9 +8,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+
 // The methods to override when extending this class:
 // initializeData, initializeTests, runAlgorithms
 public abstract class Tester<T> {
+    protected boolean usesData = true;
     private Collection<T> tests;
     protected Map<String, Integer> winnersCount = new HashMap<>();
     protected Map<String, Double> timeCount = new HashMap<>();
@@ -101,7 +103,7 @@ public abstract class Tester<T> {
 
         for (int i = 1; i < max; i++) {
             // Initializing data and tests
-            initializeData(i);
+            if (usesData) initializeData(i);
             initializeTests(i);
 
             // Running the algorithms

@@ -1,24 +1,24 @@
 package algorithms.graph_search;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
 public class DFS<T> extends GraphSearchAlgorithm<T> {
-    public void run() {
-        super.run();
+    @Override
+    protected void algorithm(T startNode, Set<T> visited, Deque<T> stack) {
+        stack.push(startNode);
 
-        Set<T> unvisited = new HashSet<>(getGraph().getNodes());
+        while (!stack.isEmpty()) {
+            T current = stack.pop();
 
-        for (T node: getGraph().getNodes()) {
-            if (unvisited.contains(node)) {
-                dfs(node, unvisited);
+            for (T neighbour : getGraph().getNeighbours(current)) {
+                if (visited.add(neighbour)) {
+                    stack.push(neighbour);
+                }
             }
         }
     }
-    private void dfs(T node, Set<T> unvisited) {
-        unvisited.remove(node);
-        for (T neighbour: getGraph().getNeighbours(node)) {
-            if (unvisited.contains(neighbour)) dfs(neighbour, unvisited);
-        }
-    }
 }
+
